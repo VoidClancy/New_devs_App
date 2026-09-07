@@ -1,6 +1,7 @@
 import json
 import redis.asyncio as redis
 from typing import Dict, Any, Optional
+from app.services.reservations import calculate_revenue
 import os
 import logging
 
@@ -43,11 +44,13 @@ async def get_revenue_summary(
         logger.warning(f"Redis cache read warning for {cache_key}: {e}")
 
     
-    # Revenue calculation is delegated to the reservation service.
-    from app.services.reservations import calculate_total_revenue
-    
     # Calculate revenue
-    result = await calculate_total_revenue(property_id, tenant_id)
+    result = await calculate_revenue(
+    property_id=property_id,
+    tenant_id=tenant_id,
+    month=month,
+    year=year,
+)
     if result is None:
         return None
     # Cache the result for 5 minutes
