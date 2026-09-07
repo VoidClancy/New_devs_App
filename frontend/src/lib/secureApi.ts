@@ -1033,6 +1033,11 @@ export class SecureAPIClient {
    * Get properties with filters
    * Using the standard /properties/ endpoint which queries the properties table
    */
+ async getDashboardProperties() {
+    const res = await this.request<any>('/api/v1/dashboard/properties');
+    return Array.isArray(res) ? res : [];
+  }
+
   async getProperties(filters?: {
     city?: string;
     portfolio?: string;
